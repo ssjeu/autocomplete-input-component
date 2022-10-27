@@ -100,6 +100,7 @@ const AutoComplete: FC<PropsWithChildren<Props>> = ({
 
 const AutoDataWrap = styled.div`
   z-index: 3;
+  min-height: 100px;
   max-height: 620px;
   width: 800px;
   border-radius: 20px;
@@ -135,6 +136,7 @@ const AutoData = styled.div`
   &:hover {
     background-color: #edf5f5;
     cursor: pointer;
+    color: #191970;
   }
 `;
 
