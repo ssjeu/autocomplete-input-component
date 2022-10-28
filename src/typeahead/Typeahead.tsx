@@ -20,9 +20,13 @@ const InputBox: FC<Props> = ({ placeholder }) => {
   const [keyword, setKeyword] = useState<string>("");
   const [keyItems, setKeyItems] = useState<autoDatas[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+
   const [showData, setShowData] = useState<boolean>(false);
+  const closeRef = useRef<HTMLDivElement>(null);
+
   const [index, setIndex] = useState<number>(-1);
   const autoRef = useRef<HTMLDivElement>(null);
+
   const scrollRef = useRef<HTMLDivElement>(null);
   const [scrollY, setScrollY] = useState<number>(0);
   const [scrollActive, setScrollActive] = useState<boolean>(false);
@@ -52,18 +56,26 @@ const InputBox: FC<Props> = ({ placeholder }) => {
     setShowData(true);
   };
 
+  // 검색창에서 검색어 input
   const onChangeData = (e: React.FormEvent<HTMLInputElement>) => {
     setKeyword(e.currentTarget.value);
   };
 
-  const onCloseData = useCallback(() => {
-    // setShowData((prev) => !prev);
-  }, []);
+  // 외부 영역 클릭 시 검색 결과창 닫기
+  const onCloseData = (event: Event) => {
+    if (!closeRef.current?.contains(event.target as Node)) {
+      return setShowData(false);
+    }
+  };
+
+  // 검색어 작성되어 있는 상태 + 결과창 닫혀있는 상태에서 검색창 다시 클릭 시 검색 결과 보이기
+  const onFocusData = (e: React.FocusEvent) => {
+    if (keyword.length) setShowData(true);
+  };
 
   // 검색 목록에서 클릭했을 때 검색창에 결과 텍스트 변경
   const clickedData = (data: string) => {
     setKeyword(data);
-    setShowData(false);
   };
 
   // 키보드 조작 화면 결과
@@ -91,7 +103,6 @@ const InputBox: FC<Props> = ({ placeholder }) => {
           if (index >= 0) {
             setKeyword(keyItems[index].name);
             setIndex(-1);
-            setShowData(false);
           }
           break;
       }
@@ -120,20 +131,21 @@ const InputBox: FC<Props> = ({ placeholder }) => {
   }, [keyword]);
 
   useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
+    document.addEventListener("click", onCloseData, true);
     return () => {
-      window.removeEventListener("scroll", handleScroll);
+      document.removeEventListener("click", onCloseData, true);
     };
   });
 
   return (
     <div>
-      <S.InputAreaWrap>
+      <S.InputAreaWrap ref={closeRef}>
         <S.InputArea
           placeholder={placeholder}
           value={keyword}
           onChange={onChangeData}
           onKeyDown={handleKeyArrow}
+          onFocus={onFocusData}
         />
         {keyword && loading ? (
           <img src={Spinner} alt="Loading" width="10%" />
