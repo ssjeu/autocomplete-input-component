@@ -12,6 +12,8 @@ import Loading from "./Loading";
 interface Props {
   keyword: string;
   clickedData: any;
+  arrowIndex: number;
+  arrowData: any;
 }
 
 interface autoDatas {
@@ -27,9 +29,12 @@ interface autoDatas {
 const AutoComplete: FC<PropsWithChildren<Props>> = ({
   keyword,
   clickedData,
+  arrowIndex,
+  arrowData
 }) => {
   const [keyItems, setKeyItems] = useState<autoDatas[]>([]);
   const [loading, setLoading] = useState(true);
+
   const autoRef = useRef<HTMLDivElement>(null);
   console.log(autoRef);
 
@@ -60,11 +65,43 @@ const AutoComplete: FC<PropsWithChildren<Props>> = ({
   useEffect(() => {
     const debounce = setTimeout(() => {
       if (keyword) searchData();
-    }, 200);
+    }, 400);
     return () => {
       clearTimeout(debounce);
     };
   }, [keyword]); //키워드가 변경되면 api를 호출
+  if(keyItems.length > 0){
+    console.log(arrowIndex);
+}
+
+//   useEffect(() => {
+    // if (keyItems.length > 0) {
+    //   switch (keyArrowAction) {
+    //     case "ArrowDown":
+    //       setIndex(index + 1);
+    //       console.log(keyArrowAction, index);
+    //       if (autoRef.current?.childElementCount === index + 1) setIndex(0);
+    //       break;
+    //     case "ArrowUp":
+    //       setIndex(index - 1);
+    //       console.log(keyArrowAction, index);
+    //       if (index <= 0) {
+    //         setIndex(keyItems.length - 1);
+    //         console.log(keyArrowAction, index);
+    //       }
+    //       break;
+    //     case "Escape":
+    //       setKeyItems([]);
+    //       setIndex(-1);
+    //       console.log(keyArrowAction, index);
+    //       clickedData("");
+    //       break;
+    //   }
+    // }
+//     if(keyItems.length > 0){
+//         console.log(arrowIndex);
+//     }
+//   }, [arrowIndex]);
 
   return (
     <AutoDataWrap ref={autoRef}>
@@ -77,6 +114,7 @@ const AutoComplete: FC<PropsWithChildren<Props>> = ({
             onClick={() => {
               clickedData(search.name);
             }}
+            // isFocus={index === idx ? true : false}
           >
             <div>
               <strong>{search.name}</strong> {search.age}
@@ -113,10 +151,11 @@ const AutoDataWrap = styled.div`
   color: black;
 `;
 
-const AutoData = styled.div`
+const AutoData = styled.div<{ isFocus?: boolean }>`
   padding: 20px 0;
   text-align: left;
   border-bottom: 1px solid;
+  background-color:${(props) => (props.isFocus ? "#edf5f5" : "#fff")}
 
   div:nth-of-type(1) {
     font-size: 24px;

@@ -1,6 +1,6 @@
 import React from "react";
 import "./App.css";
-import InputBox from "./components/InputBox";
+import Typeahead from "./typeahead/Typeahead";
 
 function App() {
   return (
@@ -9,7 +9,7 @@ function App() {
         <h1>Typeahead Demo</h1>
       </header>
       <main>
-        <InputBox placeholder="Search user name" />
+        <Typeahead placeholder="Search user name" />
       </main>
       <footer className="App-footer">
         <a
