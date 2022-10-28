@@ -1,46 +1,30 @@
-# Getting Started with Create React App
+# 자동완성 검색 컴포넌트
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 📌 How To Use 
 
-## Available Scripts
-
-In the project directory, you can run:
-
-### `yarn start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `yarn test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `yarn build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+## 📖 Manual Scripts
+1. 모든 코드는 TS로 작성해야합니다.
+2. 목적은 추상화해서 npm 라이브러리에 올려보겠다는 생각으로 만들어보세요.
+3. 자동완성 인풋 컴포넌트를 만든다
+    1. JSON데이터 셋을 이용해, 인풋값이 들어가면 그 값들 중 일치하는 정보를 찾아 리턴하는 API를 만드세요
+        
+        [generated.json](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/aecf71f2-ef10-4c64-ac79-300586539076/generated.json)
+        
+        1. 실제 서버를 구현하는게 아닌 API를 호출하는 것과 비슷하게 작동하게 만들면 됩니다
+        2. 일치하는 정보의 갯수는 제한이 없습니다.
+    2. [https://twitter.github.io/typeahead.js/](https://twitter.github.io/typeahead.js/)
+        1. 작동방식 등은 이 라이브러리를 참조하세요
+        2. 외면적으로 보이는 것만 참조해 **최대한** 비슷하게 만드는 것이 핵심입니다.
+        3. 최대 5개까지 한번에 보이며, 키보드를 위아래로 움직이면서 찾을 수 있어야 합니다
+            1. 10개의 결과값이 있을 때, 키보드를 위로 올리면 가장 아래의 값이 선택되어야 합니다
+        4. 마우스 클릭, 엔터버튼 등의 값이 눌렸을 때는 인풋창에 해당 값이 선택되어야합니다
+        5. 해당 컴포넌트를 어떻게 사용하는지 docs를 작성해봅니다.
+        6. 결과값 리스트에 보여줄 값은 커스텀하게 만드시면 됩니다
+            1. 이름(이메일), id_이름(핸드폰번호) 등<br/>
+4. (심화) JSON 데이터셋을 하나 더 추가해서(**한글 값이 들어있는**) 것으로 작동하게 만들어봅니다.
+    1. 새로만든 데이터셋은 당연히 전혀 다른 타입의 interface를 가져야합니다
+    2. 처음 주어진 데이터셋과 새로운 데이터셋을 이용해 작동하는 자동완성 컴포넌트를 총 2개 보여주세요.
+    3. 당연히 작성한 컴포넌트 1개만 있습니다.
+    4. 이때 두 개의 자동완성은 다른 배경색, 글자색 등 다른 UI를 가지게 만드세요.
+        1. 인풋창 아래의 결과값 리스트 또한 다른 배경색들을 가지게 하세요
+    5. 결과값 리스트에 보여주는 모양도 달라야 합니다.
