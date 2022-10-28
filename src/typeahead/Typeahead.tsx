@@ -43,9 +43,9 @@ const InputBox: FC<Props> = ({ placeholder }) => {
   const searchData = async () => {
     setLoading(true);
     const res = await fetchData();
+    const regex = new RegExp(keyword.replace(/\s/g, ""), "gi");
     let data = res.filter(
-      (list: IName) =>
-        list.name.toLowerCase().includes(keyword.toLowerCase()) === true
+      (list: IName) => regex.test(list.name.replace(/\s/g, "")) === true
     );
     setKeyItems(data);
     setLoading(false);
