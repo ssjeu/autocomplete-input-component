@@ -27,16 +27,15 @@ const InputBox: FC<Props> = ({ placeholder }) => {
   const [index, setIndex] = useState<number>(-1);
   const autoRef = useRef<HTMLDivElement>(null);
 
-  const scrollRef = useRef<HTMLDivElement>(null);
   const [scrollY, setScrollY] = useState<number>(0);
   const [scrollActive, setScrollActive] = useState<boolean>(false);
 
   const fetchData = () => {
     return fetch(
+        // https://adearth-bucket.s3.ap-northeast-2.amazonaws.com/MOCK_DATA.json
       `https://s3.us-west-2.amazonaws.com/secure.notion-static.com/aecf71f2-ef10-4c64-ac79-300586539076/generated.json?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20221027%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20221027T142025Z&X-Amz-Expires=86400&X-Amz-Signature=d05bf21291d31e5767a7427561449faa130247114fd963d65bd7f1eaf0e9040c&X-Amz-SignedHeaders=host&response-content-disposition=filename%3D%22generated.json%22&x-id=GetObject`
     )
       .then((res) => res.json())
-      .then((data) => data.slice(0, 100));
   };
 
   interface IName {
@@ -59,23 +58,28 @@ const InputBox: FC<Props> = ({ placeholder }) => {
   // 검색창에서 검색어 input
   const onChangeData = (e: React.FormEvent<HTMLInputElement>) => {
     setKeyword(e.currentTarget.value);
+    setIndex(-1);
   };
 
   // 외부 영역 클릭 시 검색 결과창 닫기
   const onCloseData = (event: Event) => {
     if (!closeRef.current?.contains(event.target as Node)) {
+      setIndex(-1);
       return setShowData(false);
     }
   };
 
   // 검색어 작성되어 있는 상태 + 결과창 닫혀있는 상태에서 검색창 다시 클릭 시 검색 결과 보이기
   const onFocusData = (e: React.FocusEvent) => {
-    if (keyword.length) setShowData(true);
+    if (keyword.length) {
+      setShowData(true);
+    }
   };
 
   // 검색 목록에서 클릭했을 때 검색창에 결과 텍스트 변경
   const clickedData = (data: string) => {
     setKeyword(data);
+    setShowData(false);
   };
 
   // 키보드 조작 화면 결과
@@ -103,6 +107,7 @@ const InputBox: FC<Props> = ({ placeholder }) => {
           if (index >= 0) {
             setKeyword(keyItems[index].name);
             setIndex(-1);
+            setShowData(false);
           }
           break;
       }
@@ -155,20 +160,18 @@ const InputBox: FC<Props> = ({ placeholder }) => {
       {keyword && (
         <S.AutoDataWrap ref={autoRef} display={showData}>
           {keyItems.length ? (
-            keyItems.map((search, idx) => (
+            keyItems.map((item, idx) => (
               <S.AutoData
-                key={search.name}
+                key={item.name}
                 isFocus={idx === index ? true : false}
-                onClick={() => {
-                  clickedData(search.name);
-                }}
+                onClick={() => clickedData(item.name)}
               >
                 <div>
-                  <strong>{search.name}</strong> {search.age}
+                  <strong>{item.name}</strong> {item.age}
                 </div>
-                <div>{search.email}</div>
+                <div>{item.email}</div>
                 <div>
-                  {search.phone} {search.address}
+                  {item.phone} {item.address}
                 </div>
               </S.AutoData>
             ))

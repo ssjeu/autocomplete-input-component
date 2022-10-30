@@ -10,6 +10,7 @@ function App() {
       </header>
       <main>
         <Typeahead placeholder="Search user name" />
+        {/* <Typeahead placeholder="사용자 이름을 검색하세요" /> */}
       </main>
       <footer className="App-footer">
         <a

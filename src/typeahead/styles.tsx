@@ -4,6 +4,7 @@ export const InputAreaWrap = styled.div`
   position: relative;
   width: 800px;
   height: 80px;
+//   top: 0.5vh;
 
   img {
     position: absolute;
