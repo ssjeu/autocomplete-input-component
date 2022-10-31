@@ -2,9 +2,8 @@ import styled from "styled-components";
 
 export const InputAreaWrap = styled.div`
   position: relative;
-  width: 800px;
+  width: calc(100% - 48px);
   height: 80px;
-//   top: 0.5vh;
 
   img {
     position: absolute;
@@ -18,7 +17,7 @@ export const InputArea = styled.input`
   height: 100%;
   border-radius: 60px;
   margin-bottom: 80px;
-  padding: 0 48px;
+  padding-left: 48px;
   font-size: 24px;
 `;
 
@@ -26,19 +25,18 @@ export const AutoDataWrap = styled.div<{ display?: boolean }>`
   display: ${(props) => (props.display === true ? null : "none")};
   z-index: 3;
   max-height: 620px;
-  width: 800px;
+  width: 50vw;
   border-radius: 20px;
   background-color: white;
   position: absolute;
-  top: 340px;
-  padding: 0 48px;
+  top: calc(2vh + 360px);
   border: 2px solid black;
   overflow: auto;
   color: black;
 `;
 
 export const AutoData = styled.div<{ isFocus?: boolean }>`
-  padding: 20px 0;
+  padding: 20px 48px;
   text-align: left;
   border-bottom: 1px solid;
   background-color: ${(props) => (props.isFocus === true ? "#edf5f5" : "#fff")};

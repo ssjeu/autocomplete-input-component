@@ -1,6 +1,6 @@
 import React, { FC, useCallback, useEffect, useState, useRef } from "react";
 import * as S from "./styles";
-import Spinner from "../assets/spinner.gif";
+import Spinner from "../../assets/spinner.gif";
 
 interface Props {
   placeholder: string;

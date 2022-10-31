@@ -1,16 +1,18 @@
-import React from "react";
 import "./App.css";
-import Typeahead from "./typeahead/Typeahead";
+import LanguageSelect from "./components/LanguageSelect";
+import Typeahead from "./components/Typeahead";
 
 function App() {
   return (
     <div className="App">
+      <nav className="App-nav">
+        <LanguageSelect />
+      </nav>
       <header className="App-header">
         <h1>Typeahead Demo</h1>
       </header>
-      <main>
+      <main className="App-main">
         <Typeahead placeholder="Search user name" />
-        {/* <Typeahead placeholder="사용자 이름을 검색하세요" /> */}
       </main>
       <footer className="App-footer">
         <a
