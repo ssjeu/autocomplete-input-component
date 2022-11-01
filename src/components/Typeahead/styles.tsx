@@ -21,8 +21,8 @@ export const InputArea = styled.input`
   font-size: 24px;
 `;
 
-export const AutoDataWrap = styled.div<{ display?: boolean }>`
-  display: ${(props) => (props.display === true ? null : "none")};
+export const AutoDataWrap = styled.div<{ showData?: boolean }>`
+  display: ${(props) => (props.showData === true ? null : "none")};
   z-index: 3;
   max-height: 620px;
   width: 50vw;

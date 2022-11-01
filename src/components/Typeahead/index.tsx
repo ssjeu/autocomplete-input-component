@@ -3,6 +3,7 @@ import * as S from "./styles";
 import Spinner from "../../assets/spinner.gif";
 
 interface Props {
+  dataUrl: String;
   placeholder: string;
 }
 
@@ -16,7 +17,7 @@ interface autoDatas {
   address: string;
 }
 
-const InputBox: FC<Props> = ({ placeholder }) => {
+const InputBox: FC<Props> = ({ dataUrl, placeholder }) => {
   const [keyword, setKeyword] = useState<string>("");
   const [keyItems, setKeyItems] = useState<autoDatas[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -31,11 +32,7 @@ const InputBox: FC<Props> = ({ placeholder }) => {
   const [scrollActive, setScrollActive] = useState<boolean>(false);
 
   const fetchData = () => {
-    return fetch(
-        // https://adearth-bucket.s3.ap-northeast-2.amazonaws.com/MOCK_DATA.json
-      `https://s3.us-west-2.amazonaws.com/secure.notion-static.com/aecf71f2-ef10-4c64-ac79-300586539076/generated.json?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20221027%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20221027T142025Z&X-Amz-Expires=86400&X-Amz-Signature=d05bf21291d31e5767a7427561449faa130247114fd963d65bd7f1eaf0e9040c&X-Amz-SignedHeaders=host&response-content-disposition=filename%3D%22generated.json%22&x-id=GetObject`
-    )
-      .then((res) => res.json())
+    return fetch(`${dataUrl}`).then((res) => res.json());
   };
 
   interface IName {
@@ -55,26 +52,32 @@ const InputBox: FC<Props> = ({ placeholder }) => {
     setShowData(true);
   };
 
-  // 검색창에서 검색어 input
-  const onChangeData = (e: React.FormEvent<HTMLInputElement>) => {
-    setKeyword(e.currentTarget.value);
-    setIndex(-1);
-  };
+  // 검색창 키워드 검색
+  const onChangeData = useCallback(
+    (e: React.FormEvent<HTMLInputElement>) => {
+      setKeyword(e.currentTarget.value);
+      setIndex(-1);
+    },
+    [keyword, index]
+  );
 
-  // 외부 영역 클릭 시 검색 결과창 닫기
-  const onCloseData = (event: Event) => {
-    if (!closeRef.current?.contains(event.target as Node)) {
+  // 검색창 및 결과창 영역 외 클릭 감지
+  const onCloseData = (e: Event) => {
+    if (!closeRef.current?.contains(e.target as Node)) {
       setIndex(-1);
       return setShowData(false);
     }
   };
 
   // 검색어 작성되어 있는 상태 + 결과창 닫혀있는 상태에서 검색창 다시 클릭 시 검색 결과 보이기
-  const onFocusData = (e: React.FocusEvent) => {
-    if (keyword.length) {
-      setShowData(true);
-    }
-  };
+  const onFocusData = useCallback(
+    (e: React.FocusEvent) => {
+      if (keyword.length) {
+        setShowData(true);
+      }
+    },
+    [keyword, showData]
+  );
 
   // 검색 목록에서 클릭했을 때 검색창에 결과 텍스트 변경
   const clickedData = (data: string) => {
@@ -83,53 +86,36 @@ const InputBox: FC<Props> = ({ placeholder }) => {
   };
 
   // 키보드 조작 화면 결과
-  const handleKeyArrow = (e: React.KeyboardEvent) => {
-    if (keyword && keyItems.length > 0) {
-      switch (e.key) {
-        case "ArrowDown":
-          setIndex(index + 1);
-          if (index + 1 === autoRef.current?.childElementCount) setIndex(0);
-          break;
-
-        case "ArrowUp":
-          setIndex(index - 1);
-          if (index <= 0) {
-            setIndex(keyItems.length - 1);
-          }
-          break;
-
-        case "Escape":
-          setKeyItems([]);
-          setIndex(-1);
-          break;
-
-        case "Enter":
-          if (index >= 0) {
-            setKeyword(keyItems[index].name);
+  const handleKeyArrow = useCallback(
+    (e: React.KeyboardEvent) => {
+      if (keyword && keyItems.length > 0) {
+        switch (e.key) {
+          case "ArrowDown":
+            setIndex(index + 1);
+            if (index + 1 === autoRef.current?.childElementCount) setIndex(0);
+            break;
+          case "ArrowUp":
+            setIndex(index - 1);
+            if (index <= 0) {
+              setIndex(keyItems.length - 1);
+            }
+            break;
+          case "Escape":
+            setKeyItems([]);
             setIndex(-1);
-            setShowData(false);
-          }
-          break;
+            break;
+          case "Enter":
+            if (index >= 0) {
+              setKeyword(keyItems[index].name);
+              setIndex(-1);
+              setShowData(false);
+            }
+            break;
+        }
       }
-    }
-  };
-
-  const handleScroll = () => {
-    // if (this.scrollLocationRef && this.scrollLocationRef.current) {
-    //   this.scrollLocationRef.current.scrollIntoView({
-    //     behavior: "smooth",
-    //     block: "start",
-    //   });
-    // }
-    console.log("scroll");
-    // if (autoRef.current. > 68) {
-    //     setScrollY(window.pageYOffset);
-    //     setScrollActive(true);
-    //   } else {
-    //     setScrollY(window.pageYOffset);
-    //     setScrollActive(false);
-    //   }
-  };
+    },
+    [keyword, keyItems, index]
+  );
 
   useEffect(() => {
     searchData();
@@ -158,7 +144,7 @@ const InputBox: FC<Props> = ({ placeholder }) => {
       </S.InputAreaWrap>
 
       {keyword && (
-        <S.AutoDataWrap ref={autoRef} display={showData}>
+        <S.AutoDataWrap ref={autoRef} showData={showData}>
           {keyItems.length ? (
             keyItems.map((item, idx) => (
               <S.AutoData
