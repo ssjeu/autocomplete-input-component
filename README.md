@@ -1,7 +1,13 @@
 # 자동완성 검색 컴포넌트
+TypeScript 기반 자동완성 검색창 컴포넌트화 (영문 및 한글 검색 가능)
+<br/>
 <br/>
 
 ## 📌 How To Use 
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/61870508/200292707-96081756-cb11-4c2d-b64c-9ff2f04c1a21.gif">
+</p>
+<br/>
 
 ## 📖 Manual Scripts
 1. 모든 코드는 TS로 작성해야합니다.
