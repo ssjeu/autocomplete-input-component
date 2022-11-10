@@ -28,9 +28,6 @@ const InputBox: FC<Props> = ({ dataUrl, placeholder }) => {
   const [index, setIndex] = useState<number>(-1);
   const autoRef = useRef<HTMLDivElement>(null);
 
-  const [scrollY, setScrollY] = useState<number>(0);
-  const [scrollActive, setScrollActive] = useState<boolean>(false);
-
   const fetchData = () => {
     return fetch(`${dataUrl}`).then((res) => res.json());
   };
